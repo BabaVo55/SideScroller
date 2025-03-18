@@ -26,7 +26,7 @@ class Player {
             this.position.x += this.velocity.x;
             this.position.y += this.velocity.y;
 
-            if (this.position.x +  this.width <= 0 && 
+            if (this.position.x +  this.width <= 0 || 
                 this.position.x + this.width >= canvas.width
             ){
                 this.velocity.x = 0;
@@ -41,10 +41,10 @@ class Player {
     }
 }
 
-let lastPressed;
+
 
 const optionA = {
-    x: 50,
+    x: 500,
     y: 100
 }
 
@@ -83,28 +83,41 @@ function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0,0, canvas.width, canvas.height)
     player.update()
-    
-    if (keys.right.pressed == true){
-        player.velocity.x += 5
-    } else {
-        player.velocity.x = 0;
-    }
 
-    if (keys.left.pressed == true){
-        player.velocity.x -= 5;
+    if (keys.right.pressed == true){
+        player.velocity.x = 5
+    } 
+
+    else if (keys.left.pressed == true){
+        player.velocity.x = -5;
     } else {
         player.velocity.x = 0;
     }
 }
 
+// function animate(){
+//     requestAnimationFrame(animate);
+//     c.clearRect(0,0, canvas.width, canvas.height);
+//     player.update();
+
+//     // Fix movement logic
+//     if (keys.right.pressed) {
+//         player.velocity.x = 5; 
+//     } else if (keys.left.pressed) {
+//         player.velocity.x = -5;
+//     } else {
+//         player.velocity.x = 0;
+//     }
+// }
+
+console.log(keys.left.pressed)
+console.log(keys.right.pressed)
 
 
 animate()
 
 window.addEventListener('keydown', (event) => {
-    // if (event.key === 'd'){
-    //     this.position.x + 1;
-    // }
+
     switch(event.key){
         case 'a':
             keys.left.pressed = true
@@ -119,12 +132,6 @@ window.addEventListener('keydown', (event) => {
     
 })
 window.addEventListener('keyup', (event) => {
-    // if (event.key === 'd'){
-    //     player.velocity.x = 0;
-    // } 
-    // if (event.key === 'a'){
-    //     player.velocity.x = 0;
-    // }
 
     switch(event.key){
         case 'a':
