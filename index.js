@@ -7,15 +7,9 @@ canvas.width = window.innerWidth
 const gravity = .8;
 
 class Player {
-    constructor(color='blue'){
-        this.position = {
-            x : 100,
-            y : 100
-        }
-        this.velocity = {
-            x: 0,
-            y: 0
-        }
+    constructor(position, velocity, color='blue'){
+        this.position = position;
+        this.velocity = velocity;
         this.width = 100;
         this.height = 100;
         this.color = color;
@@ -47,7 +41,32 @@ class Player {
     }
 }
 
-const player = new Player()
+let lastPressed;
+
+const optionA = {
+    x: 50,
+    y: 100
+}
+
+const optionB = {
+    x: 300,
+    y: 150
+}
+
+const player = new Player(optionA,
+velocity = {
+    x: 0,
+    y: 0
+})
+
+const keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
+    }
+}
 
 // let info = addEventListener('mousemove', (event) => {
 //     console.log(event.pageY)
@@ -64,6 +83,18 @@ function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0,0, canvas.width, canvas.height)
     player.update()
+    
+    if (keys.right.pressed == true){
+        player.velocity.x += 5
+    } else {
+        player.velocity.x = 0;
+    }
+
+    if (keys.left.pressed == true){
+        player.velocity.x -= 5;
+    } else {
+        player.velocity.x = 0;
+    }
 }
 
 
@@ -76,10 +107,10 @@ window.addEventListener('keydown', (event) => {
     // }
     switch(event.key){
         case 'a':
-            player.velocity.x += 1;
+            keys.left.pressed = true
             break;
         case 'd':
-            player.velocity.x -= 1;
+            keys.right.pressed = true
             break;
         case 'w': 
             player.velocity.y += -20;
@@ -88,20 +119,21 @@ window.addEventListener('keydown', (event) => {
     
 })
 window.addEventListener('keyup', (event) => {
-    if (event.key === 'd'){
-        player.velocity.x = 0;
-    } 
-    if (event.key === 'a'){
-        player.velocity.x = 0;
-    }
-
-    // switch(event.key){
-    //     case 'a':
-    //         player.velocity.x = 0;
-    //         break;
-    //     case 'd':
-    //         player.velocity.x = 0;
-    //         break;
+    // if (event.key === 'd'){
+    //     player.velocity.x = 0;
+    // } 
+    // if (event.key === 'a'){
+    //     player.velocity.x = 0;
     // }
+
+    switch(event.key){
+        case 'a':
+            keys.left.pressed = false;
+
+            break;
+        case 'd':
+            keys.right.pressed = false;
+            break;
+    }
     
 })
