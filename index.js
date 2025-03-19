@@ -41,6 +41,19 @@ class Player {
     }
 }
 
+class Platform {
+    constructor(position, size, color){
+        // {position, size, color}
+        this.position = position;
+        this.size = size;
+        this.color = color;
+    }
+
+    draw(){
+        c.fillRect(this.position.x, this.position.y, this.size.width, this.size.height)
+    }
+}
+
 
 
 const optionA = {
@@ -50,14 +63,22 @@ const optionA = {
 
 const optionB = {
     x: 300,
-    y: 150
+    y: 600
+}
+
+const optionBSize = {
+    width: 200,
+    height: 20
 }
 
 const player = new Player(optionA,
-velocity = {
-    x: 0,
-    y: 0
-})
+    velocity = {
+        x: 0,
+        y: 0
+    })
+    
+const platform = new Platform(optionB, optionBSize, 'blue')
+
 
 const keys = {
     right: {
@@ -83,38 +104,43 @@ function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0,0, canvas.width, canvas.height)
     player.update()
+    platform.draw()
 
     if (keys.right.pressed == true){
         player.velocity.x = 5
     } 
-
     else if (keys.left.pressed == true){
         player.velocity.x = -5;
-    } else {
+    } 
+    else {
         player.velocity.x = 0;
     }
+    if (
+        player.position.y + player.height >= platform.position.y && // Player is at or below the top of platform
+        player.position.y + player.height <= platform.position.y + platform.size.height && // Ensure it's not sinking through
+        player.position.x + player.width >= platform.position.x && // Player's right side is past platform's left edge
+        player.position.x <= platform.position.x + platform.size.width // Player's left side is before platform's right edge
+    ) {
+        player.velocity.y = 0;
+        // player.position.y = platform.position.y - player.height; // Snap to platform
+    }
+
+    // if (
+    //     player.position.y + player.height >= platform.position.y + platform.size.height && 
+    //     player.position.x + player.width == platform.position.x + platform.size.width
+    //  ){
+    //     player.velocity.y = 0
+    //  }
+
+    
 }
-
-// function animate(){
-//     requestAnimationFrame(animate);
-//     c.clearRect(0,0, canvas.width, canvas.height);
-//     player.update();
-
-//     // Fix movement logic
-//     if (keys.right.pressed) {
-//         player.velocity.x = 5; 
-//     } else if (keys.left.pressed) {
-//         player.velocity.x = -5;
-//     } else {
-//         player.velocity.x = 0;
-//     }
-// }
 
 console.log(keys.left.pressed)
 console.log(keys.right.pressed)
 
 
 animate()
+
 
 window.addEventListener('keydown', (event) => {
 
@@ -126,7 +152,7 @@ window.addEventListener('keydown', (event) => {
             keys.right.pressed = true
             break;
         case 'w': 
-            player.velocity.y += -20;
+            player.velocity.y += -15;
             break
     }
     
